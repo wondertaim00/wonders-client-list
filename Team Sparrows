@@ -1,0 +1,3562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Client List</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .team-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .team-buttons button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+        }
+
+        .team-buttons button:hover {
+            background: #555;
+        }
+
+        .selected-team {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .form-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+
+        .same-advisor {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 8px 0 15px 0;
+        }
+
+        .same-advisor input {
+            width: auto;
+            margin: 0;
+        }
+
+        .add-button {
+            width: 100%;
+            padding: 12px;
+            background: #222;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-button:hover {
+            background: #444;
+        }
+
+      	.results {
+    			background: white;
+    			padding: 15px;
+    			border-radius: 8px;
+    			overflow-x: hidden;
+			}
+
+			.team-result {
+    			margin-bottom: 15px;
+			}
+
+			.team-result-button {
+    			width: 100%;
+    			text-align: left;
+    			padding: 12px;
+    			font-size: 18px;
+    			font-weight: bold;
+    			border: none;
+    			border-radius: 6px;
+    			background: #333;
+    			color: white;
+    			cursor: pointer;
+			}
+
+			.team-result-button:hover {
+    			background: #555;
+			}
+
+			.team-content {
+    			padding: 5px 10px 15px 10px;
+			}
+
+			.advisor-title {
+    			margin-top: 15px;
+    			margin-bottom: 8px;
+    			font-size: 17px;
+    			font-weight: bold;
+			}
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #eee;
+        }
+
+        .delete-button {
+            background: #c62828;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #advisorSection {
+            display: none;
+        }
+
+			.results {
+    margin-top: 30px;
+    overflow-x: auto;
+						}
+						
+			#teamResultView {
+    			overflow: hidden !important;
+    			width: 100% !important;
+    			max-width: 100% !important;
+    			box-sizing: border-box;
+									}
+
+			#teamResultView table {
+    			width:100% !important;
+    			max-width:100% !important;
+    			table-layout:auto !important;
+    			font-size:clamp(6px,1.3vw,14px) !important;
+											}
+
+			#teamResultView th,
+			#teamResultView td {
+    			padding: 3px;
+    			word-break: break-word;
+    			overflow-wrap: anywhere;
+									}
+
+			#teamResultView {
+    			width: 100% !important;
+    			max-width: 100% !important;
+    			overflow-x: hidden !important;
+									}
+
+			#teamResultView th, #teamResultView td {
+    			padding:4px !important;
+    			word-break:normal !important;
+    			overflow-wrap:break-word !important;
+												}
+										
+						
+			.results-page {
+    			display: none;
+								}
+
+			.results-page.active {
+    			display: block;
+										}
+
+			.page-navigation {
+    			display: flex;
+    			justify-content: space-between;
+    			margin-top: 15px;
+									}
+
+			.page-navigation button {
+    			padding: 8px 15px;
+    			border: none;
+    			border-radius: 6px;
+    			background: #333;
+    			color: white;
+    			cursor: pointer;
+											}
+
+    </style>
+</head>
+
+<body>
+
+     <div style="text-align:center;">
+    <h1 style="margin-bottom:5px;">Client List</h1>
+    <h3 style="margin-top:0;">Wonders’ Team Log</h3>
+		</div> <br><br>
+
+    <!-- TEAM BUTTONS -->
+
+    <div class="team-buttons">
+
+        <button onclick="selectTeam('Wonder Sparrows')">
+            Wonder Sparrows
+        </button>
+
+        <button onclick="selectTeam('Wonders Direct')">
+            Wonders Direct
+        </button>
+
+        <button onclick="selectTeam('Wonder Falcons')">
+            Wonder Falcons
+        </button>
+
+        <button onclick="selectTeam('Wonder Swifts')">
+            Wonder Swifts
+        </button>
+
+        <button onclick="selectTeam('Wonder Flamingoes')">
+            Wonder Flamingoes
+        </button>
+
+        <button onclick="selectTeam('Wonder Ravens')">
+            Wonder Ravens
+        </button>
+
+        <button onclick="selectTeam('Wonder Ospreys')">
+            Wonder Ospreys
+        </button>
+
+    </div>
+
+
+    <!-- SELECTED TEAM -->
+
+    <div id="selectedTeam" class="selected-team">
+        Please select a team
+    </div>
+
+
+    <!-- FORM -->
+
+    <div class="form-box">
+
+
+        <!-- ADVISOR -->
+
+        <div id="advisorSection">
+
+            <label for="advisorName">
+                Advisor Name
+            </label>
+
+          <select id="advisorName" onchange="advisorChanged()">
+    			<option value="">Select Advisor</option>
+				</select>
+
+        </div>
+
+
+        <!-- CLIENT -->
+
+        <label for="clientName">
+            Client Name
+        </label>
+
+        <input
+            type="text"
+            id="clientName"
+            placeholder="Enter client name"
+        >
+
+
+        <!-- SAME AS ADVISOR -->
+
+        <div class="same-advisor">
+
+            <input
+                type="checkbox"
+                id="sameAsAdvisor"
+                onchange="useAdvisorName()"
+            >
+
+            <label
+                for="sameAsAdvisor"
+                style="margin:0; font-weight:normal;"
+            >
+                Same as Advisor
+            </label>
+
+        </div>
+
+
+        <!-- POLICY NUMBER -->
+
+        <label for="policyNumber">
+            Policy Number
+        </label>
+
+        <input
+            type="text"
+            id="policyNumber"
+            placeholder="Enter policy number"
+        >
+
+
+        <!-- DATE SUBMITTED -->
+
+        <label for="dateSubmitted">
+            Date Submitted
+        </label>
+
+        <input
+            type="date"
+            id="dateSubmitted"
+        >
+
+
+<!-- PLAN -->
+
+<label>
+    Plan
+</label>
+
+<div class="same-advisor">
+
+    <input
+        type="radio"
+        name="plan"
+        id="tradPlan"
+        value="Trad"
+        onchange="showProducts()"
+    >
+
+    <label
+        for="tradPlan"
+        style="margin:0; font-weight:normal;"
+    >
+        Trad
+    </label>
+
+    <input
+        type="radio"
+        name="plan"
+        id="vulPlan"
+        value="VUL"
+        onchange="showProducts()"
+    >
+
+    <label
+        for="vulPlan"
+        style="margin:0; font-weight:normal;"
+    >
+        VUL
+    </label>
+
+</div>
+
+
+<!-- PRODUCT -->
+
+<div id="productSection" style="display:none;">
+
+    <label for="product">
+        Product
+    </label>
+
+    <select id="product">
+
+        <option value="">
+            Select Product
+        </option>
+
+    </select>
+
+</div>
+   
+        <!-- FACE AMOUNT -->
+
+			<label for="faceAmount">Face Amount</label>
+			<input type="number" id="faceAmount" min="0">
+
+       <label for="paymentMode">Payment Mode</label>
+
+			<select id="paymentMode">
+    			<option value="">Select Payment Mode</option>
+    			<option value="Quarterly">Quarterly</option>
+    			<option value="Semi-Annual">Semi-Annual</option>
+    			<option value="Annual">Annual</option>
+			</select>
+
+			<label for="premium">Premium</label>
+			<input
+    			type="number"
+    			id="premium"
+    			min="0"
+    			step="0.01"
+    			inputmode="decimal"
+			>
+
+		  <!--DATE SETTLED -->
+			
+			<label for="dateSettled">Date Settled</label>
+			<input type="date" id="dateSettled">
+			
+			<label for="age">Age</label>
+				<input
+    			type="number"
+    			id="age"
+    			min="0"
+    			step="1"
+    			inputmode="numeric"
+				>
+			
+        <!-- ADD BUTTON -->
+
+        <button
+    			id="addClientButton"
+    			class="add-button"
+    			onclick="addClient()"
+			>
+    		Add Client
+			</button>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+<div class="results">
+
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    
+
+		<h2>Results</h2>
+
+    <div>
+        <button
+            onclick="clearAllClients()"
+            style="
+                padding:8px 12px;
+                margin-right:5px;
+                border:none;
+                border-radius:5px;
+                background:#8b0000;
+                color:white;
+                cursor:pointer;
+            "
+        >
+            Clear All
+        </button>
+
+        <button
+            onclick="undoClearAll()"
+            style="
+                padding:8px 12px;
+                border:none;
+                border-radius:5px;
+                background:#333;
+                color:white;
+                cursor:pointer;
+            "
+        >
+            Undo
+        </button>
+
+
+			<button
+    onclick="showArchives()"
+    style="
+        padding:8px 12px;
+        border:none;
+        border-radius:5px;
+        background:#555;
+        color:white;
+        cursor:pointer;
+        margin-left:5px;
+    "
+		>
+    		Archives
+			</button>
+			
+    </div>
+</div>
+
+    <div id="teamResults"></div>
+	<div id="teamResultView" style="display:none;"></div>
+
+</div>
+<script>
+
+
+    /* =========================
+       ADVISORS PER TEAM
+       ========================= */
+
+    		const SUPABASE_URL =
+    			"https://aqemfkflswgcneoaujsw.supabase.co";
+
+			const SUPABASE_KEY =
+    			"sb_publishable_J5CgMyBtHF7InnB1zOpqug_ZNOJ1Xv8";
+
+			const advisorsByTeam = {
+
+        "Wonder Sparrows": [
+
+            "Mary Joyce San Andres",
+            "Mary Jane San Andres",
+            "Mary Ann Aboy",
+            "Julia Ayen San Andres",
+            "Manuel Nery Jr.",
+            "Rose Ann Luna",
+            "Damyl Neysa Legaspi",
+            "Jerica Pastolero",
+            "Estrella Mendoza",
+            "Carmencita Darroca"
+
+        ],
+
+        "Wonders Direct": [
+            
+            "Rhea Rose Delos Reyes",
+				"Pauline Toribio",
+				"Myra Canilang",
+				"Myrami Lingat",
+				"Anna Peachy Gurango",
+				"Rosemarie Gamboa",
+				"Maureen Artais",
+				"Marilou Pelaez",
+				"Clarence Mojares",
+				"Lizabille Garciano",
+				"Melanie Garciano",
+				"Alessandria Nicolas",
+				"Maricris Flora",
+				"Anne Babia",
+				"Grestee Travel"
+        							],
+
+        "Wonder Falcons": [
+
+			"Norlan Catigan",
+			"Ivvah Elizha Soyangco",
+			"Anne Teves",
+			"John Paul Pineda",
+			"Rianne Calara"
+			
+									],
+
+        "Wonder Swifts": [
+				"Blanca Beatriz Cervantes",
+				"John Louis De Vera",
+				"Charmaine Medina",
+				"Faye Michelle Bedania",
+				"Sherry Mae Tobias",
+				"Nadine Santiago",
+				"Dixie Faustino"
+
+									],
+
+        "Wonder Flamingoes": [
+
+				"Azriel Gabiel Ramos",
+				"Katherine Panahon",
+				"Dave Oytas",
+				"Marc Joseph Talabis"
+				
+				
+										],
+
+        "Wonder Ravens": [
+
+				"Yancey Duane Faigao",
+				"Micol Sarmiento",
+				"Marilou Cuerpo",
+				"Rachell Dungo",
+				"Aran Jinno Espiritu",
+				"Joseph Romiral",
+				"Aristeo Castillo",
+				"Lerjohn Raphael Panganiban"
+
+									],
+
+        "Wonder Ospreys": [
+
+         "Eugene Santiago",
+         "Rachelle Mijares",
+			"Margene Aguinaldo",
+			"Rex Dionisio",
+			"Cherry Ignacio"
+			
+        							],
+
+    };
+
+
+    /* =========================
+       VARIABLES
+       ========================= */
+
+    const productsByPlan = {
+
+    "VUL": [
+        "Sun Maxilink Prime",
+        "Sun Maxilink Bright",
+        "Sun Maxi 100",
+        "Sun Flexi Link"
+    ],
+
+    "Trad": [
+        "Sun Life Assure",
+        "Sun Secure Income 3",
+        "Sun Secure Income 5",
+        "Sun Secure Income 10",
+        "Sun Secure Income 15",
+        "Sun Fit and Well Adv 10",
+        "Sun Fit and Well Adv 15",
+        "Sun Fit and Well Adv 20",
+        "Elite 10",
+        "Elite Regular Pay"
+    ]
+
+};
+
+		let selectedTeam = "";
+		
+
+    	let clients = [];
+
+		let backupClients = [];
+
+
+async function loadClients() {
+
+    try {
+
+        const response = await fetch(
+            SUPABASE_URL + "/rest/v1/clients?select=*",
+            {
+                method: "GET",
+
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization":
+                        "Bearer " + SUPABASE_KEY
+                }
+            }
+        );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Supabase load error:",
+                errorText
+            );
+
+            alert(
+                "Hindi ma-load ang shared client list.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+
+        clients =
+            await response.json();
+
+
+
+        /* CONVERT DATABASE NAMES TO APP NAMES */
+
+        clients = clients.map(function(item) {
+
+            return {
+                id: item.id,
+
+                team: item.team,
+
+                advisor: item.advisor,
+
+                client: item.client,
+
+                policyNumber:
+                    item.policy_number || "",
+
+                dateSubmitted:
+                    item.date_submitted || "",
+
+                plan: item.plan,
+
+                product: item.product,
+
+                faceAmount:
+                    item.face_amount || "",
+
+                paymentMode:
+                    item.payment_mode || "",
+
+                premium:
+                    item.premium || "",
+
+                acOverride:
+                    item.ac_override ?? "",
+
+                dateSettled:
+                    item.date_settled || "",
+
+                age:
+                    item.age ?? ""
+            };
+
+        });
+
+
+        displayClients();
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Load error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+    }
+
+}
+
+
+    /* =========================
+       SELECT TEAM
+       ========================= */
+
+    function selectTeam(teamName) {
+
+        selectedTeam = teamName;
+
+        document.getElementById("selectedTeam").textContent =
+            teamName;
+
+
+        const advisorSection =
+            document.getElementById("advisorSection");
+
+        const advisorDropdown =
+            document.getElementById("advisorName");
+
+
+        advisorDropdown.innerHTML =
+            '<option value="">Select Advisor</option>';
+
+
+        const advisors =
+            advisorsByTeam[teamName] || [];
+
+
+        if (advisors.length > 0) {
+
+            advisorSection.style.display = "block";
+
+
+            advisors.forEach(function(advisor) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value = advisor;
+
+                option.textContent = advisor;
+
+                advisorDropdown.appendChild(option);
+
+            });
+
+        } else {
+
+            advisorSection.style.display = "none";
+
+        }
+
+
+        document.getElementById("clientName").value = "";
+
+        document.getElementById("sameAsAdvisor").checked = false;
+
+    }
+
+
+    /* =========================
+       SAME AS ADVISOR
+       ========================= */
+
+    function useAdvisorName() {
+
+        const checkbox =
+            document.getElementById("sameAsAdvisor");
+
+        const advisor =
+            document.getElementById("advisorName").value;
+
+        const client =
+            document.getElementById("clientName");
+
+
+        if (checkbox.checked) {
+
+            client.value = advisor;
+
+        } else {
+
+            client.value = "";
+
+        }
+
+    }
+   			function advisorChanged() {
+
+    document.getElementById("sameAsAdvisor").checked = false;
+
+    document.getElementById("clientName").value = "";
+
+												    }
+
+
+    /* =========================
+       ADD CLIENT
+       ========================= */
+
+		function showProducts() {
+
+    const selectedPlan =
+        document.querySelector('input[name="plan"]:checked');
+
+    const productSection =
+        document.getElementById("productSection");
+
+    const productDropdown =
+        document.getElementById("product");
+
+
+    productDropdown.innerHTML =
+        '<option value="">Select Product</option>';
+
+
+    if (!selectedPlan) {
+
+        productSection.style.display = "none";
+
+        return;
+    }
+
+
+    productSection.style.display = "block";
+
+
+    const products =
+        productsByPlan[selectedPlan.value] || [];
+
+
+    products.forEach(function(product) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = product;
+
+        option.textContent = product;
+
+        productDropdown.appendChild(option);
+
+    });
+
+}
+
+		function calculateAC(product, faceAmount, age, premium) {
+    const fa = Number(faceAmount || 0);
+    const clientAge = Number(age || 0);
+    const prem = Number(premium || 0);
+
+    let rate = null;
+
+    if (product === "Sun Life Assure") {
+        rate = 0.55;
+    }
+    else if (product === "Sun Maxilink Prime") {
+        rate = 0.45;
+    }
+
+	 else if (product === "Sun Maxilink Bright") {
+    rate = 0.20;
+    }
+
+    else if (product === "Sun Maxi 100") {
+        rate = 0.50;
+    }
+    else if (product === "Elite 10") {
+        if (fa >= 200000 && fa < 1000000) {
+            rate = 0.45;
+        }
+        else if (fa >= 1000000) {
+            rate = 0.50;
+        }
+    }
+    else if (product === "Sun Fit and Well Adv 10") {
+        if (clientAge <= 55) {
+            rate = 0.35;
+        }
+        else if (clientAge <= 60) {
+            rate = 0.30;
+        }
+    }
+    else if (product === "Sun Fit and Well Adv 15") {
+        if (clientAge <= 50) {
+            rate = 0.40;
+        }
+        else if (clientAge <= 55) {
+            rate = 0.35;
+        }
+    }
+    else if (product === "Sun Fit and Well Adv 20") {
+        if (clientAge <= 45) {
+            rate = 0.45;
+        }
+        else if (clientAge <= 50) {
+            rate = 0.40;
+        }
+    }
+
+    if (rate === null || prem <= 0) {
+        return null;
+    }
+
+    return prem * rate;
+}
+
+
+		function calculateNSC(product, faceAmount, age, premium, paymentMode) {
+    const ac = calculateAC(
+        product,
+        faceAmount,
+        age,
+        premium
+    );
+
+    if (ac === null) {
+        return null;
+    }
+
+    if (paymentMode === "Quarterly") {
+        return ac * 4;
+    }
+
+    if (paymentMode === "Semi-Annual") {
+        return ac * 2;
+    }
+
+    if (paymentMode === "Annual") {
+        return ac;
+    }
+
+    return null;
+				}
+				
+				
+
+    async function addClient() {
+
+    const advisor =
+        document.getElementById("advisorName").value;
+
+    const client =
+        document.getElementById("clientName").value.trim();
+
+    const policyNumber =
+        document.getElementById("policyNumber").value.trim();
+
+    const dateSubmitted =
+        document.getElementById("dateSubmitted").value;
+
+    const selectedPlan =
+        document.querySelector('input[name="plan"]:checked');
+
+    const plan =
+        selectedPlan ? selectedPlan.value : "";
+
+    const product =
+        document.getElementById("product").value;
+
+    const faceAmount =
+        document.getElementById("faceAmount").value;
+
+    const paymentMode =
+        document.getElementById("paymentMode").value;
+
+    const premium =
+        document.getElementById("premium").value;
+
+    const dateSettled =
+        document.getElementById("dateSettled").value;
+
+    const age =
+        document.getElementById("age").value;
+
+
+    /* CHECK TEAM */
+
+    if (selectedTeam === "") {
+        alert("Please select a team first.");
+        return;
+    }
+
+
+    /* CHECK ADVISOR */
+
+    if (
+        advisorsByTeam[selectedTeam].length > 0 &&
+        advisor === ""
+    ) {
+        alert("Please select an advisor.");
+        return;
+    }
+
+
+    /* CHECK CLIENT */
+
+    if (client === "") {
+        alert("Please enter client name.");
+        return;
+    }
+
+
+    /* CHECK DATE */
+
+    if (dateSubmitted === "") {
+        alert("Please select date submitted.");
+        return;
+    }
+
+
+    /* CHECK PLAN */
+
+    if (plan === "") {
+        alert("Please select a plan.");
+        return;
+    }
+
+
+    /* CHECK PRODUCT */
+
+    if (product === "") {
+        alert("Please select a product.");
+        return;
+    }
+
+
+    /* CHECK FACE AMOUNT */
+
+    if (faceAmount === "") {
+        alert("Please enter face amount.");
+        return;
+    }
+
+
+    /* CHECK PAYMENT MODE */
+
+    if (paymentMode === "") {
+        alert("Please select payment mode.");
+        return;
+    }
+
+
+    /* CHECK PREMIUM */
+
+    if (premium === "") {
+        alert("Please enter premium.");
+        return;
+    }
+
+
+    /* CHECK AGE FOR SFW */
+
+    const sfwProducts = [
+        "Sun Fit and Well Adv 10",
+        "Sun Fit and Well Adv 15",
+        "Sun Fit and Well Adv 20"
+    ];
+
+    if (sfwProducts.includes(product) && age === "") {
+        alert("Please enter Age for Sun Fit and Well.");
+        return;
+    }
+
+
+    /* SAVE TO SUPABASE */
+
+    const newClient = {
+        team: selectedTeam,
+        advisor: advisor,
+        client: client,
+        policy_number: policyNumber,
+        date_submitted: dateSubmitted,
+        plan: plan,
+        product: product,
+        face_amount: Number(faceAmount),
+        payment_mode: paymentMode,
+        premium: Number(premium),
+        ac_override: null,
+        date_settled: dateSettled || null,
+        age: age === "" ? null : Number(age)
+    };
+
+
+    try {
+
+        const response = await fetch(
+            SUPABASE_URL + "/rest/v1/clients",
+            {
+                method: "POST",
+
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization":
+                        "Bearer " + SUPABASE_KEY,
+                    "Content-Type":
+                        "application/json",
+                    "Prefer":
+                        "return=representation"
+                },
+
+                body: JSON.stringify(newClient)
+            }
+        );
+
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Supabase error:",
+                errorText
+            );
+
+            alert(
+                "Hindi na-save sa database.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+
+        /* GET SAVED RECORD */
+
+        const savedData =
+            await response.json();
+
+        console.log(
+            "Saved to Supabase:",
+            savedData
+        );
+
+
+        /* BACKUP LOCAL DATA FOR NOW */
+
+        const localClient = {
+            team: selectedTeam,
+            advisor: advisor,
+            client: client,
+            policyNumber: policyNumber,
+            dateSubmitted: dateSubmitted,
+            plan: plan,
+            product: product,
+            faceAmount: faceAmount,
+            paymentMode: paymentMode,
+            premium: premium,
+            dateSettled: dateSettled,
+            age: age,
+            acOverride: ""
+        };
+
+
+        clients.push(localClient);
+
+
+        localStorage.setItem(
+            "clientList",
+            JSON.stringify(clients)
+        );
+
+
+        /* CLEAR FORM */
+
+        document.getElementById("clientName").value = "";
+
+        document.getElementById("policyNumber").value = "";
+
+        document.getElementById("dateSubmitted").value = "";
+
+        document.getElementById("tradPlan").checked = false;
+
+        document.getElementById("vulPlan").checked = false;
+
+        document.getElementById("product").innerHTML =
+            '<option value="">Select Product</option>';
+
+        document.getElementById("productSection").style.display =
+            "none";
+
+        document.getElementById("faceAmount").value = "";
+
+        document.getElementById("paymentMode").value = "";
+
+        document.getElementById("premium").value = "";
+
+        document.getElementById("dateSettled").value = "";
+
+        document.getElementById("age").value = "";
+
+        document.getElementById("sameAsAdvisor").checked = false;
+
+
+        alert("Client saved successfully!");
+
+
+        displayClients();
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Connection error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+    }
+
+}
+
+    /* =========================
+       DISPLAY RESULTS
+       ========================= */
+
+
+	async function clearAllClients() {
+
+    if (clients.length === 0) {
+        alert("There are no clients to clear.");
+        return;
+    }
+
+    const archivePeriod =
+        prompt(
+            "Enter archive period:\n\n" +
+            "Example: Q3 2026"
+        );
+
+    if (!archivePeriod || archivePeriod.trim() === "") {
+        alert("Archive cancelled.");
+        return;
+    }
+
+    const confirmClear =
+        confirm(
+            "Archive and Clear ALL clients?\n\n" +
+            "Archive: " + archivePeriod.trim() + "\n\n" +
+            "All current clients will first be saved to the Archive.\n" +
+            "After that, they will be removed from the Current Client List."
+        );
+
+    if (!confirmClear) {
+        return;
+    }
+
+    backupClients = [...clients];
+
+    try {
+
+        let archived = 0;
+
+        /* =========================
+           ARCHIVE CLIENTS
+        ========================= */
+
+        for (const old of clients) {
+
+            const archiveData = {
+
+                archive_period:
+                    archivePeriod.trim(),
+
+                original_id:
+                    old.id || null,
+
+                team:
+                    old.team || "",
+
+                advisor:
+                    old.advisor || "",
+
+                client:
+                    old.client || "",
+
+                policy_number:
+                    old.policyNumber || "",
+
+                date_submitted:
+                    old.dateSubmitted || null,
+
+                plan:
+                    old.plan || "",
+
+                product:
+                    old.product || "",
+
+                face_amount:
+                    Number(old.faceAmount || 0),
+
+                payment_mode:
+                    old.paymentMode || "",
+
+                premium:
+                    Number(old.premium || 0),
+
+                ac_override:
+                    old.acOverride === "" ||
+                    old.acOverride === undefined ||
+                    old.acOverride === null
+                        ? null
+                        : Number(old.acOverride),
+
+                date_settled:
+                    old.dateSettled || null,
+
+                age:
+                    old.age === "" ||
+                    old.age === undefined ||
+                    old.age === null
+                        ? null
+                        : Number(old.age)
+            };
+
+            const archiveResponse =
+                await fetch(
+                    SUPABASE_URL +
+                    "/rest/v1/client_archives",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                "Bearer " + SUPABASE_KEY,
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(archiveData)
+                    }
+                );
+
+            if (!archiveResponse.ok) {
+
+                const errorText =
+                    await archiveResponse.text();
+
+                console.log(
+                    "Archive error:",
+                    errorText
+                );
+
+                alert(
+                    "Archive failed.\n\n" +
+                    "Hindi muna buburahin ang current clients.\n\n" +
+                    errorText
+                );
+
+                backupClients = [];
+
+                return;
+            }
+
+            archived++;
+        }
+
+
+        /* =========================
+           DELETE CURRENT CLIENTS
+        ========================= */
+
+        const deleteResponse =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/clients?id=not.is.null",
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY
+                    }
+                }
+            );
+
+
+        if (!deleteResponse.ok) {
+
+            const errorText =
+                await deleteResponse.text();
+
+            console.log(
+                "Supabase clear error:",
+                errorText
+            );
+
+            alert(
+                "Clients were archived, but the current list could not be cleared.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           UPDATE LOCAL LIST
+        ========================= */
+
+        clients = [];
+
+        localStorage.setItem(
+            "clientList",
+            JSON.stringify(clients)
+        );
+
+        displayClients();
+
+
+        alert(
+            "Archive complete!\n\n" +
+            "Archive: " +
+            archivePeriod.trim() +
+            "\n" +
+            "Clients archived: " +
+            archived +
+            "\n\n" +
+            "Current client list has been cleared."
+        );
+
+    }
+    catch (error) {
+
+        console.log(
+            "Archive/Clear error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+
+        backupClients = [];
+    }
+}
+
+		async function undoClearAll() {
+
+    if (backupClients.length === 0) {
+        alert("Nothing to undo.");
+        return;
+    }
+
+    try {
+
+        let restored = 0;
+
+        for (const old of backupClients) {
+
+            const restoredClient = {
+
+                team: old.team || "",
+                advisor: old.advisor || "",
+                client: old.client || "",
+                policy_number:
+                    old.policyNumber || "",
+                date_submitted:
+                    old.dateSubmitted || null,
+                plan: old.plan || "",
+                product: old.product || "",
+                face_amount:
+                    Number(old.faceAmount || 0),
+                payment_mode:
+                    old.paymentMode || "",
+                premium:
+                    Number(old.premium || 0),
+                ac_override:
+                    old.acOverride === "" ||
+                    old.acOverride === undefined
+                        ? null
+                        : Number(old.acOverride),
+                date_settled:
+                    old.dateSettled || null,
+                age:
+                    old.age === "" ||
+                    old.age === undefined
+                        ? null
+                        : Number(old.age)
+            };
+
+            const response =
+                await fetch(
+                    SUPABASE_URL + "/rest/v1/clients",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                "Bearer " + SUPABASE_KEY,
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(restoredClient)
+                    }
+                );
+
+            if (response.ok) {
+                restored++;
+            }
+        }
+
+        await loadClients();
+
+        backupClients = [];
+
+        alert(
+            "Undo complete!\n\n" +
+            "Restored: " +
+            restored +
+            " client(s)."
+        );
+
+    }
+    catch (error) {
+
+        console.log(
+            "Undo error:",
+            error
+        );
+
+        alert(
+            "Hindi ma-restore ang clients.\n\n" +
+            error
+        );
+    }
+}
+
+async function showArchives() {
+
+    try {
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/client_archives?select=archive_period,archived_at&order=archived_at.desc",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Archive load error:",
+                errorText
+            );
+
+            alert(
+                "Hindi ma-load ang archives.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+        const archives =
+            await response.json();
+
+
+        /* REMOVE DUPLICATE PERIODS */
+
+        const periods = [
+            ...new Set(
+                archives.map(function(item) {
+                    return item.archive_period;
+                })
+            )
+        ];
+
+
+        if (periods.length === 0) {
+
+            alert(
+                "Wala pang archived client lists."
+            );
+
+            return;
+        }
+
+
+        /* ARCHIVE LIST */
+
+        let message =
+            "Archived Client Lists:\n\n";
+
+        periods.forEach(function(period, index) {
+
+            message +=
+                (index + 1) +
+                ". " +
+                period +
+                "\n";
+        });
+
+
+        const choice =
+            prompt(
+                message +
+                "\nEnter the number of the archive to view:"
+            );
+
+
+        if (!choice) {
+            return;
+        }
+
+
+        const selectedIndex =
+            Number(choice) - 1;
+
+
+        if (
+            selectedIndex < 0 ||
+            selectedIndex >= periods.length
+        ) {
+
+            alert(
+                "Invalid archive selection."
+            );
+
+            return;
+        }
+
+
+        const selectedPeriod =
+            periods[selectedIndex];
+
+
+        await viewArchive(
+            selectedPeriod
+        );
+
+    }
+    catch (error) {
+
+        console.log(
+            "Archive error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+    }
+}
+
+
+async function viewArchive(period) {
+
+    try {
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/client_archives?archive_period=eq." +
+                encodeURIComponent(period) +
+                "&select=*&order=archived_at.asc",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Archive view error:",
+                errorText
+            );
+
+            alert(
+                "Hindi ma-load ang archived clients.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+        const archivedClients =
+            await response.json();
+
+
+        if (archivedClients.length === 0) {
+
+            alert(
+                "Walang clients sa archive na ito."
+            );
+
+            return;
+        }
+
+
+        const container =
+            document.getElementById("teamResults");
+
+        container.innerHTML = "";
+
+
+        /* ARCHIVE TITLE */
+
+        const title =
+            document.createElement("h2");
+
+        title.textContent =
+            "Archive: " + period;
+
+        title.style.textAlign = "center";
+
+        container.appendChild(title);
+
+
+        /* BACK BUTTON */
+
+        const backButton =
+            document.createElement("button");
+
+        backButton.textContent =
+            "← Back to Current Results";
+
+        backButton.style.padding =
+            "8px 12px";
+
+        backButton.style.marginBottom =
+            "15px";
+
+        backButton.style.border =
+            "none";
+
+        backButton.style.borderRadius =
+            "5px";
+
+        backButton.style.background =
+            "#333";
+
+        backButton.style.color =
+            "white";
+
+        backButton.style.cursor =
+            "pointer";
+
+        backButton.onclick =
+            function() {
+
+                displayClients();
+
+            };
+
+        container.appendChild(
+            backButton
+        );
+
+
+        /* TABLE */
+
+        const table =
+            document.createElement("table");
+
+        table.style.width =
+            "100%";
+
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Date Submitted</th>
+                    <th>Policy Number</th>
+                    <th>Client</th>
+                    <th>Team</th>
+                    <th>Advisor</th>
+                    <th>Plan</th>
+                    <th>Face Amount</th>
+                    <th>Payment Mode</th>
+                    <th>Premium</th>
+                    <th>AC</th>
+                    <th>NSC</th>
+                    <th>Date Settled</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
+
+
+        const tbody =
+            table.querySelector("tbody");
+
+
+        archivedClients.forEach(
+            function(item) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                const ac =
+                    calculateAC(
+                        item.product,
+                        item.face_amount,
+                        item.age,
+                        item.premium
+                    );
+
+
+                const nsc =
+                    calculateNSC(
+                        item.product,
+                        item.face_amount,
+                        item.age,
+                        item.premium,
+                        item.payment_mode
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+                        ${item.date_submitted || ""}
+                    </td>
+
+                    <td>
+                        ${item.policy_number || ""}
+                    </td>
+
+                    <td>
+                        ${item.client || ""}
+                    </td>
+
+                    <td>
+                        ${item.team || ""}
+                    </td>
+
+                    <td>
+                        ${item.advisor || ""}
+                    </td>
+
+                    <td>
+                        ${item.product || ""}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            item.face_amount || 0
+                        ).toLocaleString()}
+                    </td>
+
+                    <td>
+                        ${item.payment_mode || ""}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            item.premium || 0
+                        ).toLocaleString(
+                            undefined,
+                            {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            }
+                        )}
+                    </td>
+
+                    <td>
+                        ${
+                            ac !== null
+                                ? ac.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                  )
+                                : ""
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            nsc !== null
+                                ? nsc.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    }
+                                  )
+                                : ""
+                        }
+                    </td>
+
+                    <td>
+                        ${item.date_settled || ""}
+                    </td>
+
+                    <td>
+                        ${item.age || ""}
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(row);
+
+            }
+        );
+
+
+        container.appendChild(table);
+
+			const restoreButton =
+    document.createElement("button");
+
+restoreButton.textContent =
+    "Restore This Archive";
+
+restoreButton.style.padding =
+    "8px 12px";
+
+restoreButton.style.marginTop =
+    "10px";
+
+restoreButton.style.border =
+    "none";
+
+restoreButton.style.borderRadius =
+    "5px";
+
+restoreButton.style.background =
+    "#555";
+
+restoreButton.style.color =
+    "white";
+
+restoreButton.style.cursor =
+    "pointer";
+
+restoreButton.onclick =
+    function() {
+
+        restoreArchive(period);
+
+    };
+
+container.appendChild(
+    restoreButton
+);
+
+
+        /* TOTAL */
+
+        const total =
+            document.createElement("div");
+
+        total.style.textAlign =
+            "right";
+
+        total.style.fontWeight =
+            "bold";
+
+        total.style.marginTop =
+            "8px";
+
+        total.textContent =
+            "Total Archived Clients: " +
+            archivedClients.length;
+
+        container.appendChild(total);
+
+    }
+    catch (error) {
+
+        console.log(
+            "Archive view error:",
+            error
+        );
+
+        alert(
+            "Hindi ma-load ang archive.\n\n" +
+            error
+        );
+    }
+}
+
+
+async function restoreArchive(period) {
+
+    const confirmRestore =
+        confirm(
+            "Restore archive: " +
+            period +
+            "?\n\n" +
+            "The archived clients will be added back to the current client list."
+        );
+
+    if (!confirmRestore) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/client_archives?archive_period=eq." +
+                encodeURIComponent(period) +
+                "&select=*",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY
+                    }
+                }
+            );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            alert(
+                "Hindi ma-load ang archive.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+        const archivedClients =
+            await response.json();
+
+
+        if (archivedClients.length === 0) {
+
+            alert(
+                "Walang clients sa selected archive."
+            );
+
+            return;
+        }
+
+
+        let restored = 0;
+
+
+        for (const old of archivedClients) {
+
+            const restoredClient = {
+
+                team:
+                    old.team || "",
+
+                advisor:
+                    old.advisor || "",
+
+                client:
+                    old.client || "",
+
+                policy_number:
+                    old.policy_number || "",
+
+                date_submitted:
+                    old.date_submitted || null,
+
+                plan:
+                    old.plan || "",
+
+                product:
+                    old.product || "",
+
+                face_amount:
+                    Number(
+                        old.face_amount || 0
+                    ),
+
+                payment_mode:
+                    old.payment_mode || "",
+
+                premium:
+                    Number(
+                        old.premium || 0
+                    ),
+
+                ac_override:
+                    old.ac_override === null ||
+                    old.ac_override === undefined
+                        ? null
+                        : Number(
+                            old.ac_override
+                          ),
+
+                date_settled:
+                    old.date_settled || null,
+
+                age:
+                    old.age === null ||
+                    old.age === undefined
+                        ? null
+                        : Number(old.age)
+            };
+
+
+            const insertResponse =
+                await fetch(
+                    SUPABASE_URL +
+                    "/rest/v1/clients",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                "Bearer " + SUPABASE_KEY,
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(
+                                restoredClient
+                            )
+                    }
+                );
+
+
+            if (insertResponse.ok) {
+                restored++;
+            }
+
+        }
+
+
+        await loadClients();
+
+
+        alert(
+            "Restore complete!\n\n" +
+            "Archive: " +
+            period +
+            "\n" +
+            "Restored: " +
+            restored +
+            " client(s)."
+        );
+
+    }
+    catch (error) {
+
+        console.log(
+            "Restore error:",
+            error
+        );
+
+        alert(
+            "Hindi ma-restore ang archive.\n\n" +
+            error
+        );
+    }
+}
+
+    
+	function displayClients() {
+
+    const container =
+        document.getElementById("teamResults");
+
+    container.innerHTML = "";
+
+    const teams = [...new Set(
+        clients.map(function(item) {
+            return item.team;
+        })
+    )];
+
+
+    teams.forEach(function(team) {
+
+        const teamBox =
+            document.createElement("div");
+
+        teamBox.className = "team-result";
+
+
+        /* TEAM NAME */
+
+        const teamTitle =
+            document.createElement("button");
+
+        teamTitle.textContent =
+            team + " ▼";
+
+        teamTitle.className = "team-result-button";
+
+        /* TEAM CONTENT */
+
+        const teamContent =
+            document.createElement("div");
+
+        		teamContent.className = "team-content";
+				teamContent.style.display = "block";
+
+
+        /* ADVISORS */
+
+        const teamClients =
+            clients.filter(function(item) {
+                return item.team === team;
+            });
+
+
+        const advisors =
+            [...new Set(
+                teamClients.map(function(item) {
+                    return item.advisor;
+                })
+            )];
+
+
+        advisors.forEach(function(advisor) {
+
+            const advisorTitle =
+                document.createElement("h3");
+
+            advisorTitle.textContent =
+                "Advisor: " + advisor;
+
+            advisorTitle.className = "advisor-title";
+
+            teamContent.appendChild(
+                advisorTitle
+            );
+
+
+            /* TABLE */
+
+            const table =
+    document.createElement("table");
+
+table.style.width = "100%";
+
+table.innerHTML = `
+    <thead>
+        <tr>
+            <th>Date Submitted</th>
+            <th>Policy Number</th>
+            <th>Client</th>
+            <th>Lives</th>
+            <th>Plan</th>
+            <th>Face Amount</th>
+            <th>Payment Mode</th>
+            <th>Premium</th>
+            <th>AC</th>
+            <th>NSC</th>
+            <th>Date Settled</th>
+            <th>Age</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+`;
+
+
+            const tbody =
+                table.querySelector("tbody");
+
+
+            const advisorClients =
+                teamClients.filter(function(item) {
+                    return item.advisor === advisor;
+                });
+
+
+            advisorClients.forEach(function(item) {
+
+                const index =
+                    clients.indexOf(item);
+
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+    				<td>${item.dateSubmitted}</td>
+
+    				<td>${item.policyNumber}</td>
+
+    				<td>${item.client}</td>
+
+			    	<td>1</td>
+
+    				<td>${item.product}</td>
+
+    				<td>
+        				${Number(item.faceAmount).toLocaleString()}
+    				</td>
+
+    				<td>${item.paymentMode}</td>
+
+    				<td style="
+    border:1px solid #ccc;
+    padding:3px;
+    word-break:break-all;
+">
+    ${Number(item.premium || 0).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}
+</td>
+
+<td style="
+    border:1px solid #ccc;
+    padding:3px 6px;
+    white-space:nowrap;
+">
+    ${calculateAC(
+        item.product,
+        item.faceAmount,
+        item.age,
+        item.premium
+    ) !== null
+        ? calculateAC(
+            item.product,
+            item.faceAmount,
+            item.age,
+            item.premium
+          ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+          })
+        : ""}
+</td>
+
+<td style="
+    border:1px solid #ccc;
+    padding:3px 6px;
+    white-space:nowrap;
+">
+    ${calculateNSC(
+        item.product,
+        item.faceAmount,
+        item.age,
+        item.premium,
+        item.paymentMode
+    ) !== null
+        ? calculateNSC(
+            item.product,
+            item.faceAmount,
+            item.age,
+            item.premium,
+            item.paymentMode
+          ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+          })
+        : ""}
+</td>
+					
+					<td>${item.dateSettled || ""}</td>
+
+    			<td>${item.age || ""}</td>
+
+    			<td>
+    				<button
+        			onclick="editClientInline(${index})"
+    				>
+        			Edit
+    				</button>
+
+    				<button
+        			class="delete-button"
+        			onclick="deleteClient(${index})"
+    				>
+        			Delete
+    				</button>
+				</td>
+
+`;
+
+
+                tbody.appendChild(row);
+
+            });
+
+
+                        teamContent.appendChild(table);
+
+            const totalLives =
+                document.createElement("div");
+
+            totalLives.style.textAlign = "right";
+            totalLives.style.fontWeight = "bold";
+            totalLives.style.marginTop = "5px";
+            totalLives.textContent =
+                "Total Lives: " + advisorClients.length;
+
+            teamContent.appendChild(totalLives);
+
+        });
+
+
+        /* CLICK TEAM */
+
+        teamTitle.onclick = function() {
+
+            if (teamContent.style.display === "none") {
+
+                teamContent.style.display = "block";
+
+                teamTitle.textContent =
+                    team + " ▼";
+
+            } else {
+
+                teamContent.style.display = "none";
+
+                teamTitle.textContent =
+                    team + " ▶";
+
+            }
+
+        };
+
+
+        teamBox.appendChild(teamTitle);
+
+
+/* SHOW RESULTS BUTTON */
+
+const showButton =
+    document.createElement("button");
+
+showButton.textContent =
+    "Show Results";
+
+showButton.style.marginTop = "8px";
+showButton.style.padding = "8px 12px";
+showButton.style.border = "none";
+showButton.style.borderRadius = "5px";
+showButton.style.background = "#222";
+showButton.style.color = "white";
+showButton.style.cursor = "pointer";
+
+showButton.onclick = function() {
+
+    showTeamResults(team);
+
+};
+
+
+teamBox.appendChild(showButton);
+
+teamBox.appendChild(teamContent);
+
+container.appendChild(teamBox);
+    });
+
+}
+
+
+function getAC(item) {
+
+    if (
+        item.acOverride !== undefined &&
+        item.acOverride !== "" &&
+        item.acOverride !== null
+    ) {
+        return Number(item.acOverride);
+    }
+
+    return calculateAC(
+        item.product,
+        item.faceAmount,
+        item.age,
+        item.premium
+    );
+}
+
+
+function getNSC(item) {
+
+    const ac = getAC(item);
+
+    if (ac === null) {
+        return null;
+    }
+
+    if (item.paymentMode === "Quarterly") {
+        return ac * 4;
+    }
+
+    if (item.paymentMode === "Semi-Annual") {
+        return ac * 2;
+    }
+
+    if (item.paymentMode === "Annual") {
+        return ac;
+    }
+
+    return null;
+}
+
+
+    /* =========================
+       DELETE
+       ========================= */
+
+    async function deleteClient(index) {
+
+    if (!confirm("Delete this client?")) {
+        return;
+    }
+
+    const client = clients[index];
+
+    if (!client || !client.id) {
+        alert("Hindi makita ang database ID ng client.");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            SUPABASE_URL +
+            "/rest/v1/clients?id=eq." +
+            client.id,
+            {
+                method: "DELETE",
+
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization":
+                        "Bearer " + SUPABASE_KEY
+                }
+            }
+        );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Supabase delete error:",
+                errorText
+            );
+
+            alert(
+                "Hindi ma-delete sa database.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+        // Remove from current display
+        clients.splice(index, 1);
+
+        localStorage.setItem(
+            "clientList",
+            JSON.stringify(clients)
+        );
+
+        displayClients();
+
+        alert("Client deleted successfully!");
+
+    }
+    catch (error) {
+
+        console.log(
+            "Delete error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+    }
+}
+
+    /* =========================
+		 EDIT CLIENT
+		 ========================= */
+		
+		let editingIndex = -1;
+
+function editClientInline(index) {
+
+    const item = clients[index];
+
+    const rows =
+        document.querySelectorAll("#teamResults tbody tr");
+
+    const targetRow =
+        [...rows].find(function(row) {
+
+            const buttons =
+                row.querySelectorAll("button");
+
+            return buttons.length &&
+                buttons[0].getAttribute("onclick") ===
+                "editClientInline(" + index + ")";
+
+        });
+
+    if (!targetRow) {
+        return;
+    }
+
+    targetRow.innerHTML = `
+
+        <td>
+            <input
+                type="date"
+                value="${item.dateSubmitted || ""}"
+                id="editDateSubmitted${index}"
+            >
+        </td>
+
+        <td>
+            <input
+                type="text"
+                value="${item.policyNumber || ""}"
+                id="editPolicy${index}"
+            >
+        </td>
+
+        <td>
+            <input
+                type="text"
+                value="${item.client || ""}"
+                id="editClient${index}"
+            >
+        </td>
+
+        <td>1</td>
+
+        <td>
+            <input
+                type="text"
+                value="${item.product || ""}"
+                id="editProduct${index}"
+            >
+        </td>
+
+        <td>
+            <input
+                type="number"
+                value="${item.faceAmount || ""}"
+                id="editFaceAmount${index}"
+            >
+        </td>
+
+        <td>
+            <select id="editPaymentMode${index}">
+                <option value="">Select</option>
+                <option value="Quarterly"
+                    ${item.paymentMode === "Quarterly" ? "selected" : ""}>
+                    Quarterly
+                </option>
+                <option value="Semi-Annual"
+                    ${item.paymentMode === "Semi-Annual" ? "selected" : ""}>
+                    Semi-Annual
+                </option>
+                <option value="Annual"
+                    ${item.paymentMode === "Annual" ? "selected" : ""}>
+                    Annual
+                </option>
+            </select>
+        </td>
+
+        <td>
+            <input
+                type="number"
+                step="0.01"
+                value="${item.premium || ""}"
+                id="editPremium${index}"
+            >
+        </td>
+
+        <!-- DITO ANG AC EDIT -->
+
+        <td>
+            <input
+                type="number"
+                step="0.01"
+                value="${item.acOverride ?? ""}"
+                placeholder="Auto"
+                id="editAC${index}"
+            >
+        </td>
+
+        <td>
+            ${getNSC(item) !== null
+                ? getNSC(item).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })
+                : ""
+            }
+        </td>
+
+        <td>
+            <input
+                type="date"
+                value="${item.dateSettled || ""}"
+                id="editDateSettled${index}"
+            >
+        </td>
+
+        <td>
+            <input
+                type="number"
+                value="${item.age || ""}"
+                id="editAge${index}"
+            >
+        </td>
+
+        <td>
+            <button onclick="saveInlineEdit(${index})">
+                Save
+            </button>
+
+            <button onclick="displayClients()">
+                Cancel
+            </button>
+        </td>
+
+    `;
+}
+
+async function saveInlineEdit(index) {
+
+    const item = clients[index];
+
+    if (!item || !item.id) {
+        alert("Hindi makita ang database ID ng client.");
+        return;
+    }
+
+    const dateSubmitted =
+        document.getElementById(
+            "editDateSubmitted" + index
+        ).value;
+
+    const policyNumber =
+        document.getElementById(
+            "editPolicy" + index
+        ).value.trim();
+
+    const client =
+        document.getElementById(
+            "editClient" + index
+        ).value.trim();
+
+    const product =
+        document.getElementById(
+            "editProduct" + index
+        ).value.trim();
+
+    const faceAmount =
+        document.getElementById(
+            "editFaceAmount" + index
+        ).value;
+
+    const paymentMode =
+        document.getElementById(
+            "editPaymentMode" + index
+        ).value;
+
+    const premium =
+        document.getElementById(
+            "editPremium" + index
+        ).value;
+
+    const acOverride =
+        document.getElementById(
+            "editAC" + index
+        ).value;
+
+    const dateSettled =
+        document.getElementById(
+            "editDateSettled" + index
+        ).value;
+
+    const age =
+        document.getElementById(
+            "editAge" + index
+        ).value;
+
+    if (client === "") {
+        alert("Please enter client name.");
+        return;
+    }
+
+    if (paymentMode === "") {
+        alert("Please select payment mode.");
+        return;
+    }
+
+    if (premium === "") {
+        alert("Please enter premium.");
+        return;
+    }
+
+    const updatedClient = {
+
+        date_submitted:
+            dateSubmitted || null,
+
+        policy_number:
+            policyNumber,
+
+        client:
+            client,
+
+        product:
+            product,
+
+        face_amount:
+            Number(faceAmount || 0),
+
+        payment_mode:
+            paymentMode,
+
+        premium:
+            Number(premium || 0),
+
+        ac_override:
+            acOverride === ""
+                ? null
+                : Number(acOverride),
+
+        date_settled:
+            dateSettled || null,
+
+        age:
+            age === ""
+                ? null
+                : Number(age)
+    };
+
+    try {
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/rest/v1/clients?id=eq." +
+                item.id,
+                {
+                    method: "PATCH",
+
+                    headers: {
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            "Bearer " + SUPABASE_KEY,
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify(updatedClient)
+                }
+            );
+
+        if (!response.ok) {
+
+            const errorText =
+                await response.text();
+
+            console.log(
+                "Supabase update error:",
+                errorText
+            );
+
+            alert(
+                "Hindi ma-update sa database.\n\n" +
+                errorText
+            );
+
+            return;
+        }
+
+        alert("Client updated successfully!");
+
+        await loadClients();
+
+    }
+    catch (error) {
+
+        console.log(
+            "Update error:",
+            error
+        );
+
+        alert(
+            "Hindi makakonekta sa Supabase.\n\n" +
+            error
+        );
+    }
+}
+		
+
+    /* =========================
+       INITIAL DISPLAY
+       ========================= */
+
+    displayClients();
+
+function printResults() {
+
+    const results =
+        document.getElementById("teamResults").innerHTML;
+
+    const previewWindow =
+        window.open("", "_blank");
+
+    previewWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html>
+
+        <head>
+
+            <title>Client List - Preview</title>
+
+            <style>
+
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 30px;
+                }
+
+                h1 {
+                    text-align: center;
+                }
+
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                }
+
+                th,
+                td {
+                    border: 1px solid #999;
+                    padding: 8px;
+                    text-align: left;
+                }
+
+                th {
+                    background: #eee;
+                }
+
+                button {
+                    display: none !important;
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h1>Client List</h1>
+
+            ${results}
+
+        </body>
+
+        </html>
+
+    `);
+
+    previewWindow.document.close();
+
+
+
+}
+
+
+			function showTeamResults(teamName) {
+
+    const teamClients =
+        clients.filter(function(item) {
+            return item.team === teamName;
+        });
+
+    const advisors =
+        [...new Set(
+            teamClients.map(function(item) {
+                return item.advisor;
+            })
+        )];
+
+    const mainResults =
+        document.querySelector(".results");
+
+    const teamResults =
+        document.getElementById("teamResults");
+
+    const teamResultView =
+        document.getElementById("teamResultView");
+
+    // Hide everything before Results
+    document.querySelectorAll("body > *").forEach(function(element) {
+        if (element !== mainResults) {
+            element.style.display = "none";
+        }
+    });
+
+    mainResults.querySelector("h2").style.display = "none";
+    teamResults.style.display = "none";
+    teamResultView.style.display = "block";
+
+    let html = `
+
+        <button
+            onclick="closeTeamResults()"
+            style="
+                padding:10px 15px;
+                margin-bottom:20px;
+                border:none;
+                border-radius:6px;
+                background:#333;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            "
+        >
+            ← Back
+        </button>
+
+        <h1 style="text-align:center;">
+            ${teamName}
+        </h1>
+
+    `;
+
+    advisors.forEach(function(advisor) {
+
+        html += `
+
+            <h2 style="
+                margin-top:25px;
+                border-bottom:2px solid #333;
+                padding-bottom:6px;
+            ">
+                Advisor: ${advisor}
+            </h2>
+
+            <table style="
+                width:100%;
+                max-width:100%;
+                table-layout:fixed;
+                border-collapse:collapse;
+                margin-bottom:25px;
+                font-size:clamp(6px, 1.3vw, 14px);
+            ">
+
+               <thead>
+    <tr>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Date Submitted
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Policy Number
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Client
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Lives
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Plan
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Face Amount
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Payment Mode
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Premium
+        </th>
+
+			<th style="border:1px solid #ccc; padding:3px;">
+            AC
+        </th>
+
+			<th style="border:1px solid #ccc; padding:3px;">
+            NSC
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Date Settled
+        </th>
+
+        <th style="border:1px solid #ccc; padding:3px;">
+            Age
+        </th>
+
+    </tr>
+</thead>
+
+                <tbody>
+        `;
+
+        const advisorClients =
+            teamClients.filter(function(item) {
+                return item.advisor === advisor;
+            });
+
+        advisorClients.forEach(function(item) {
+
+            html += `
+
+    <tr>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+            word-break:break-all;
+        ">
+            ${item.dateSubmitted}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+            word-break:break-all;
+        ">
+            ${item.policyNumber || ""}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+            word-break:break-all;
+        ">
+            ${item.client}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+        ">
+            1
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+        ">
+            ${item.product}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+            word-break:break-all;
+        ">
+            ${Number(item.faceAmount).toLocaleString()}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+        ">
+            ${item.paymentMode || ""}
+        </td>
+
+        <td style="
+    			border:1px solid #ccc;
+    			padding:3px;
+    			word-break:break-all;
+			">
+    			${Number(item.premium || 0).toLocaleString(undefined, {
+        		minimumFractionDigits: 2,
+        		maximumFractionDigits: 2
+    		})}
+			</td>
+
+			<!-- AC -->
+<td style="
+    border:1px solid #ccc;
+    padding:3px;
+    word-break:break-all;
+">
+    ${calculateAC(
+        item.product,
+        item.faceAmount,
+        item.age,
+        item.premium
+    ) !== null
+        ? calculateAC(
+            item.product,
+            item.faceAmount,
+            item.age,
+            item.premium
+          ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+          })
+        : ""}
+</td>
+
+<!-- NSC -->
+<td style="
+    border:1px solid #ccc;
+    padding:3px;
+    word-break:break-all;
+">
+    ${calculateNSC(
+        item.product,
+        item.faceAmount,
+        item.age,
+        item.premium,
+        item.paymentMode
+    ) !== null
+        ? calculateNSC(
+            item.product,
+            item.faceAmount,
+            item.age,
+            item.premium,
+            item.paymentMode
+          ).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+          })
+        : ""}
+</td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+            word-break:break-all;
+        ">
+            ${item.dateSettled || ""}
+        </td>
+
+        <td style="
+            border:1px solid #ccc;
+            padding:3px;
+        ">
+            ${item.age || ""}
+        </td>
+
+    </tr>
+
+`;
+
+        });
+
+        html += `
+
+                </tbody>
+
+            </table>
+
+				<div style="margin-top:8px; font-weight:bold;">
+    				Total Lives: ${advisorClients.length}
+				</div>
+        `;
+
+    });
+
+    teamResultView.innerHTML = `
+    <div id="resultsPages"></div>
+
+    <div class="page-navigation">
+        <button id="prevPage" onclick="changeResultsPage(-1)">
+            ← Previous
+        </button>
+
+        <span id="pageNumber" style="padding:8px;"></span>
+
+        <button id="nextPage" onclick="changeResultsPage(1)">
+            Next →
+        </button>
+    </div>
+`;
+
+const resultsPages = document.getElementById("resultsPages");
+
+const temp = document.createElement("div");
+temp.innerHTML = html;
+
+const backButton = temp.querySelector("button");
+const teamTitle = temp.querySelector("h1");
+
+const advisorElements = [];
+
+let currentAdvisor = null;
+
+Array.from(temp.children).forEach(function(element) {
+
+    if (element.tagName === "H2") {
+
+        currentAdvisor = {
+            title: element,
+            table: null
+        };
+
+        advisorElements.push(currentAdvisor);
+
+    } else if (
+        element.tagName === "TABLE" &&
+        currentAdvisor
+    ) {
+
+        currentAdvisor.table = element;
+
+    }
+});
+
+let pageNumber = 1;
+let page = document.createElement("div");
+
+page.className = "results-page active";
+page.style.minHeight = "70vh";
+
+if (backButton) {
+    page.appendChild(backButton);
+}
+
+if (teamTitle) {
+    page.appendChild(teamTitle);
+}
+
+resultsPages.appendChild(page);
+
+advisorElements.forEach(function(advisor, index) {
+
+    const advisorBlock = document.createElement("div");
+
+    advisorBlock.appendChild(advisor.title);
+
+    if (advisor.table) {
+        advisorBlock.appendChild(advisor.table);
+    }
+
+    // 6 advisors per page
+    if (index % 6 === 0 && index !== 0) {
+
+        pageNumber++;
+
+        page = document.createElement("div");
+        page.className = "results-page";
+        page.style.minHeight = "70vh";
+
+        resultsPages.appendChild(page);
+    }
+
+    page.appendChild(advisorBlock);
+});
+
+window.currentResultsPage = 1;
+window.totalResultsPages = pageNumber;
+
+updateResultsPage();
+}
+
+
+		function updateResultsPage() {
+
+    const pages =
+        document.querySelectorAll("#resultsPages .results-page");
+
+    document.getElementById("pageNumber").textContent =
+        "Page " +
+        window.currentResultsPage +
+        " of " +
+        pages.length;
+
+    document.getElementById("prevPage").style.visibility =
+        window.currentResultsPage === 1
+            ? "hidden"
+            : "visible";
+
+    document.getElementById("nextPage").style.visibility =
+        window.currentResultsPage === pages.length
+            ? "hidden"
+            : "visible";
+}
+
+
+		function changeResultsPage(direction) {
+
+    const pages =
+        document.querySelectorAll("#resultsPages .results-page");
+
+    let newPage =
+        window.currentResultsPage + direction;
+
+    if (newPage < 1) {
+        newPage = 1;
+    }
+
+    if (newPage > pages.length) {
+        newPage = pages.length;
+    }
+
+    pages.forEach(function(page, index) {
+        page.classList.toggle(
+            "active",
+            index === newPage - 1
+        );
+    });
+
+    window.currentResultsPage = newPage;
+
+    updateResultsPage();
+}
+		
+		
+		function closeTeamResults() {
+
+    document.body.classList.remove("show-results-mode");
+
+    document.querySelectorAll("body > *").forEach(function(element) {
+        element.style.display = "";
+    });
+
+    document.getElementById("teamResultView").style.display =
+        "none";
+
+    document.getElementById("teamResults").style.display =
+        "block";
+
+    document.querySelector(".results h2").style.display =
+        "block";
+}
+
+
+loadClients();
+
+
+</script>
+
+
+</body>
+</html>
