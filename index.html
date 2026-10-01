@@ -166,14 +166,7 @@
     margin-top: 30px;
     overflow-x: auto;
 						}
-						
-			#teamResultView {
-    			overflow: hidden !important;
-    			width: 100% !important;
-    			max-width: 100% !important;
-    			box-sizing: border-box;
-									}
-
+					
 			#teamResultView table {
     			width:100% !important;
     			max-width:100% !important;
@@ -412,7 +405,20 @@
     </select>
 
 </div>
-   
+  
+			<!--LIVES-->
+
+		<label for="lives">Lives</label>
+			<input
+    type="number"
+    id="lives"
+    min="0.01"
+    step="0.01"
+    value="1"
+    placeholder="e.g. 1, 0.5, 0.3"
+			>
+
+
         <!-- FACE AMOUNT -->
 
 			<label for="faceAmount">Face Amount</label>
@@ -732,6 +738,8 @@ async function loadClients() {
 
                 product: item.product,
 
+						lives: item.lives ?? 1,
+
                 faceAmount:
                     item.face_amount || "",
 
@@ -919,10 +927,11 @@ async function loadClients() {
 
 }
 
-		function calculateAC(product, faceAmount, age, premium) {
+		function calculateAC(product, faceAmount, age, premium, lives) {
     const fa = Number(faceAmount || 0);
     const clientAge = Number(age || 0);
     const prem = Number(premium || 0);
+	 const lifeCount = Number(lives || 1);
 
     let rate = null;
 
@@ -977,17 +986,18 @@ async function loadClients() {
         return null;
     }
 
-    return prem * rate;
+    return prem * rate * lifeCount;
 }
 
 
-		function calculateNSC(product, faceAmount, age, premium, paymentMode) {
+		function calculateNSC(product, faceAmount, age, premium, paymentMode, lives) {
     const ac = calculateAC(
-        product,
-        faceAmount,
-        age,
-        premium
-    );
+    product,
+    faceAmount,
+    age,
+    premium,
+    lives
+);
 
     if (ac === null) {
         return null;
@@ -1148,6 +1158,7 @@ async function loadClients() {
         date_submitted: dateSubmitted,
         plan: plan,
         product: product,
+		  lives: Number(document.getElementById("lives").value || 1),
         face_amount: Number(faceAmount),
         payment_mode: paymentMode,
         premium: Number(premium),
@@ -1386,12 +1397,15 @@ async function loadClients() {
                     old.dateSettled || null,
 
                 age:
-                    old.age === "" ||
-                    old.age === undefined ||
-                    old.age === null
-                        ? null
-                        : Number(old.age)
-            };
+    					old.age === "" ||
+    					old.age === undefined ||
+    					old.age === null
+        				? null
+        				: Number(old.age),
+
+					lives:
+    					Number(old.lives ?? 1)
+            			};
 
             const archiveResponse =
                 await fetch(
@@ -1870,6 +1884,7 @@ async function viewArchive(period) {
                     <th>Date Submitted</th>
                     <th>Policy Number</th>
                     <th>Client</th>
+							<th>Lives</th>
                     <th>Team</th>
                     <th>Advisor</th>
                     <th>Plan</th>
@@ -1898,22 +1913,24 @@ async function viewArchive(period) {
 
 
                 const ac =
-                    calculateAC(
-                        item.product,
-                        item.face_amount,
-                        item.age,
-                        item.premium
-                    );
+    				calculateAC(
+        			item.product,
+        			item.face_amount,
+        			item.age,
+        			item.premium,
+        			item.lives
+    							);
 
 
                 const nsc =
-                    calculateNSC(
-                        item.product,
-                        item.face_amount,
-                        item.age,
-                        item.premium,
-                        item.payment_mode
-                    );
+    					calculateNSC(
+        				item.product,
+        				item.face_amount,
+        				item.age,
+        				item.premium,
+        				item.payment_mode,
+        				item.lives
+    								);
 
 
                 row.innerHTML = `
@@ -1926,14 +1943,12 @@ async function viewArchive(period) {
                         ${item.policy_number || ""}
                     </td>
 
-                    <td>
-                        ${item.client || ""}
-                    </td>
+                   <td> ${item.client || ""} </td>
 
-                    <td>
-                        ${item.team || ""}
-                    </td>
+							<td> ${item.lives ?? 1} </td>
 
+							<td> ${item.team || ""} </td>
+							
                     <td>
                         ${item.advisor || ""}
                     </td>
@@ -2199,11 +2214,14 @@ async function restoreArchive(period) {
                     old.date_settled || null,
 
                 age:
-                    old.age === null ||
-                    old.age === undefined
-                        ? null
-                        : Number(old.age)
-            };
+    					old.age === null ||
+    					old.age === undefined
+        				? null
+        				: Number(old.age),
+
+					lives:
+    					Number(old.lives ?? 1)
+            		};
 
 
             const insertResponse =
@@ -2394,7 +2412,7 @@ table.innerHTML = `
 
     				<td>${item.client}</td>
 
-			    	<td>1</td>
+			    	<td>${item.lives ?? 1}</td>
 
     				<td>${item.product}</td>
 
@@ -2424,13 +2442,15 @@ table.innerHTML = `
         item.product,
         item.faceAmount,
         item.age,
-        item.premium
+        item.premium,
+        item.lives
     ) !== null
         ? calculateAC(
             item.product,
             item.faceAmount,
             item.age,
-            item.premium
+            item.premium,
+            item.lives
           ).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
@@ -2448,14 +2468,16 @@ table.innerHTML = `
         item.faceAmount,
         item.age,
         item.premium,
-        item.paymentMode
+        item.paymentMode,
+			item.lives
     ) !== null
         ? calculateNSC(
             item.product,
             item.faceAmount,
             item.age,
             item.premium,
-            item.paymentMode
+            item.paymentMode,
+				item.lives
           ).toLocaleString(undefined, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2
@@ -2499,7 +2521,10 @@ table.innerHTML = `
             totalLives.style.fontWeight = "bold";
             totalLives.style.marginTop = "5px";
             totalLives.textContent =
-                "Total Lives: " + advisorClients.length;
+    "Total Lives: " +
+    advisorClients.reduce(function(total, client) {
+        return total + Number(client.lives || 1);
+    }, 0);
 
             teamContent.appendChild(totalLives);
 
@@ -2579,7 +2604,8 @@ function getAC(item) {
         item.product,
         item.faceAmount,
         item.age,
-        item.premium
+        item.premium,
+        item.lives
     );
 }
 
@@ -2742,7 +2768,15 @@ function editClientInline(index) {
             >
         </td>
 
-        <td>1</td>
+        <td>
+    		<input
+        type="number"
+        step="0.01"
+        min="0.01"
+        value="${item.lives ?? 1}"
+        id="editLives${index}"
+    			>
+			</td>
 
         <td>
             <input
@@ -2872,6 +2906,11 @@ async function saveInlineEdit(index) {
             "editFaceAmount" + index
         ).value;
 
+		const lives =
+    document.getElementById(
+        "editLives" + index
+    ).value;
+
     const paymentMode =
         document.getElementById(
             "editPaymentMode" + index
@@ -2925,6 +2964,9 @@ async function saveInlineEdit(index) {
 
         product:
             product,
+
+			lives:
+    		Number(lives || 1),
 
         face_amount:
             Number(faceAmount || 0),
@@ -3147,6 +3189,10 @@ function printResults() {
 
     `;
 
+		let teamTotalLives = 0;
+		let teamTotalAC = 0;
+		let teamTotalNSC = 0;
+
     advisors.forEach(function(advisor) {
 
         html += `
@@ -3230,7 +3276,42 @@ function printResults() {
                 return item.advisor === advisor;
             });
 
+			let totalLives = advisorClients.reduce(function(total, client) {
+    return total + Number(client.lives || 1);
+}, 0);
+			let totalAC = 0;
+			let totalNSC = 0;
+
         advisorClients.forEach(function(item) {
+
+				const lives = Number(item.lives || 1);
+
+const ac = calculateAC(
+    item.product,
+    item.faceAmount,
+    item.age,
+    item.premium,
+    lives
+);
+
+const nsc = calculateNSC(
+    item.product,
+    item.faceAmount,
+    item.age,
+    item.premium,
+    item.paymentMode,
+    lives
+);
+
+if (ac !== null) {
+    totalAC += ac;
+}
+
+if (nsc !== null) {
+    totalNSC += nsc;
+}
+
+			
 
             html += `
 
@@ -3260,12 +3341,12 @@ function printResults() {
             ${item.client}
         </td>
 
-        <td style="
-            border:1px solid #ccc;
-            padding:3px;
-        ">
-            1
-        </td>
+       <td style="
+    		border:1px solid #ccc;
+    		padding:3px;
+				">
+    		${item.lives ?? 1}
+		  </td>
 
         <td style="
             border:1px solid #ccc;
@@ -3371,18 +3452,59 @@ function printResults() {
 
         });
 
+			teamTotalLives += totalLives;
+			teamTotalAC += totalAC;
+			teamTotalNSC += totalNSC;
+
+
         html += `
 
                 </tbody>
 
             </table>
 
-				<div style="margin-top:8px; font-weight:bold;">
-    				Total Lives: ${advisorClients.length}
-				</div>
+				<div style="
+    margin-top:8px;
+    font-weight:bold;
+    line-height:1.6;
+">
+    Total Lives: ${totalLives}
+&nbsp;&nbsp;|&nbsp;&nbsp;
+Total AC: ${totalAC.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+})}
+&nbsp;&nbsp;|&nbsp;&nbsp;
+Total NSC: ${totalNSC.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+})}
+</div>
         `;
 
     });
+
+			html += `
+    <div id="teamTotals" style="
+        margin-top:25px;
+        padding-top:10px;
+        border-top:2px solid #333;
+        font-weight:bold;
+        line-height:1.7;
+    ">
+        TOTAL TEAM LIVES: ${teamTotalLives}
+&nbsp;&nbsp;|&nbsp;&nbsp;
+TOTAL TEAM AC: ${teamTotalAC.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+})}
+&nbsp;&nbsp;|&nbsp;&nbsp;
+TOTAL TEAM NSC: ${teamTotalNSC.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+})}
+    </div>
+`;
 
     teamResultView.innerHTML = `
     <div id="resultsPages"></div>
@@ -3411,6 +3533,7 @@ const teamTitle = temp.querySelector("h1");
 const advisorElements = [];
 
 let currentAdvisor = null;
+let teamTotals = null;
 
 Array.from(temp.children).forEach(function(element) {
 
@@ -3418,12 +3541,15 @@ Array.from(temp.children).forEach(function(element) {
 
         currentAdvisor = {
             title: element,
-            table: null
+            table: null,
+            total: null
         };
 
         advisorElements.push(currentAdvisor);
 
-    } else if (
+    }
+
+    else if (
         element.tagName === "TABLE" &&
         currentAdvisor
     ) {
@@ -3431,51 +3557,220 @@ Array.from(temp.children).forEach(function(element) {
         currentAdvisor.table = element;
 
     }
+
+    else if (
+        element.id === "teamTotals"
+    ) {
+
+        teamTotals = element;
+
+    }
+
+    else if (
+        element.tagName === "DIV" &&
+        currentAdvisor
+    ) {
+
+        currentAdvisor.total = element;
+
+    }
+
 });
+
 
 let pageNumber = 1;
 let page = document.createElement("div");
 
-page.className = "results-page active";
-page.style.minHeight = "70vh";
+function createResultsPage() {
+
+    const newPage =
+        document.createElement("div");
+
+    newPage.className =
+        "results-page";
+
+    newPage.style.minHeight =
+        "70vh";
+
+    const newBackButton =
+        backButton.cloneNode(true);
+
+    newPage.appendChild(
+        newBackButton
+    );
+
+    resultsPages.appendChild(
+        newPage
+    );
+
+    return newPage;
+}
+
+
+/* FIRST PAGE */
+
+page.className =
+    "results-page active";
+
+page.style.minHeight =
+    "70vh";
 
 if (backButton) {
-    page.appendChild(backButton);
+    page.appendChild(
+        backButton.cloneNode(true)
+    );
 }
 
 if (teamTitle) {
-    page.appendChild(teamTitle);
+    page.appendChild(
+        teamTitle.cloneNode(true)
+    );
 }
 
-resultsPages.appendChild(page);
+resultsPages.appendChild(
+    page
+);
 
-advisorElements.forEach(function(advisor, index) {
 
-    const advisorBlock = document.createElement("div");
+let clientsOnPage = 0;
 
-    advisorBlock.appendChild(advisor.title);
 
-    if (advisor.table) {
-        advisorBlock.appendChild(advisor.table);
+/* ADD CLIENTS */
+
+advisorElements.forEach(function(advisor) {
+
+    const rows =
+        advisor.table
+            ? Array.from(
+                advisor.table.querySelectorAll("tbody tr")
+              )
+            : [];
+
+    let rowIndex = 0;
+
+    while (rowIndex < rows.length) {
+
+        if (clientsOnPage >= 7) {
+
+            pageNumber++;
+
+            page =
+                createResultsPage();
+
+            clientsOnPage = 0;
+        }
+
+
+        const advisorBlock =
+            document.createElement("div");
+
+
+        advisorBlock.appendChild(
+            advisor.title.cloneNode(true)
+        );
+
+
+        const table =
+            advisor.table.cloneNode(false);
+
+
+        const thead =
+            advisor.table.querySelector("thead");
+
+        if (thead) {
+
+            table.appendChild(
+                thead.cloneNode(true)
+            );
+
+        }
+
+
+        const tbody =
+            document.createElement("tbody");
+
+
+        const remaining =
+            7 - clientsOnPage;
+
+
+        const rowsToAdd =
+            rows.slice(
+                rowIndex,
+                rowIndex + remaining
+            );
+
+
+        rowsToAdd.forEach(function(row) {
+
+            tbody.appendChild(
+                row.cloneNode(true)
+            );
+
+        });
+
+
+        table.appendChild(
+            tbody
+        );
+
+
+        advisorBlock.appendChild(
+            table
+        );
+
+
+        rowIndex +=
+            rowsToAdd.length;
+
+
+        clientsOnPage +=
+            rowsToAdd.length;
+
+
+        /* ADD ADVISOR TOTAL
+           ONLY WHEN ADVISOR IS FINISHED */
+
+        if (
+            rowIndex >= rows.length &&
+            advisor.total
+        ) {
+
+            advisorBlock.appendChild(
+                advisor.total.cloneNode(true)
+            );
+
+        }
+
+
+        page.appendChild(
+            advisorBlock
+        );
+
     }
 
-    // 6 advisors per page
-    if (index % 6 === 0 && index !== 0) {
-
-        pageNumber++;
-
-        page = document.createElement("div");
-        page.className = "results-page";
-        page.style.minHeight = "70vh";
-
-        resultsPages.appendChild(page);
-    }
-
-    page.appendChild(advisorBlock);
 });
 
+
+/* TEAM TOTAL */
+
+if (teamTotals) {
+
+    page.appendChild(
+        teamTotals.cloneNode(true)
+    );
+
+}
+
+
+/* FINAL PAGE COUNT */
+
 window.currentResultsPage = 1;
-window.totalResultsPages = pageNumber;
+
+window.totalResultsPages =
+    document.querySelectorAll(
+        "#resultsPages .results-page"
+    ).length;
 
 updateResultsPage();
 }
@@ -3484,13 +3779,45 @@ updateResultsPage();
 		function updateResultsPage() {
 
     const pages =
-        document.querySelectorAll("#resultsPages .results-page");
+        document.querySelectorAll(
+            "#resultsPages .results-page"
+        );
+
+    const totalPages = pages.length;
+
+    if (totalPages === 0) {
+        return;
+    }
+
+    if (
+        !window.currentResultsPage ||
+        isNaN(window.currentResultsPage)
+    ) {
+        window.currentResultsPage = 1;
+    }
+
+    if (window.currentResultsPage < 1) {
+        window.currentResultsPage = 1;
+    }
+
+    if (window.currentResultsPage > totalPages) {
+        window.currentResultsPage = totalPages;
+    }
+
+    pages.forEach(function(page, index) {
+
+        page.classList.toggle(
+            "active",
+            index === window.currentResultsPage - 1
+        );
+
+    });
 
     document.getElementById("pageNumber").textContent =
         "Page " +
         window.currentResultsPage +
         " of " +
-        pages.length;
+        totalPages;
 
     document.getElementById("prevPage").style.visibility =
         window.currentResultsPage === 1
@@ -3498,7 +3825,7 @@ updateResultsPage();
             : "visible";
 
     document.getElementById("nextPage").style.visibility =
-        window.currentResultsPage === pages.length
+        window.currentResultsPage === totalPages
             ? "hidden"
             : "visible";
 }
@@ -3507,25 +3834,33 @@ updateResultsPage();
 		function changeResultsPage(direction) {
 
     const pages =
-        document.querySelectorAll("#resultsPages .results-page");
+        document.querySelectorAll(
+            "#resultsPages .results-page"
+        );
+
+    const totalPages = pages.length;
+
+    if (totalPages === 0) {
+        return;
+    }
+
+    let current =
+        Number(window.currentResultsPage);
+
+    if (isNaN(current) || current < 1) {
+        current = 1;
+    }
 
     let newPage =
-        window.currentResultsPage + direction;
+        current + Number(direction);
 
     if (newPage < 1) {
         newPage = 1;
     }
 
-    if (newPage > pages.length) {
-        newPage = pages.length;
+    if (newPage > totalPages) {
+        newPage = totalPages;
     }
-
-    pages.forEach(function(page, index) {
-        page.classList.toggle(
-            "active",
-            index === newPage - 1
-        );
-    });
 
     window.currentResultsPage = newPage;
 
