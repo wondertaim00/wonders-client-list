@@ -528,7 +528,26 @@
 </div>
 
     <div id="teamResults"></div>
-	<div id="teamResultView" style="display:none;"></div>
+<div id="teamResultView" style="display:none;"></div>
+
+<div style="text-align:center; margin-top:20px;">
+    <button
+        onclick="showMedallionSummary()"
+        style="
+            padding:10px 15px;
+            border:none;
+            border-radius:6px;
+            background:#333;
+            color:white;
+            cursor:pointer;
+            font-weight:bold;
+        "
+    >
+        Medallion Summary
+    </button>
+</div>
+
+<div id="medallionView" style="display:none;"></div>
 
 </div>
 <script>
@@ -3829,6 +3848,221 @@ updateResultsPage();
         "block";
 
     document.querySelector(".results h2").style.display =
+        "block";
+}
+
+
+function showMedallionSummary() {
+
+    const teamResults =
+        document.getElementById("teamResults");
+
+    const teamResultView =
+        document.getElementById("teamResultView");
+
+    const medallionView =
+        document.getElementById("medallionView");
+
+    teamResults.style.display = "none";
+    teamResultView.style.display = "none";
+    medallionView.style.display = "block";
+
+    let html = `
+        <button
+            onclick="closeMedallionSummary()"
+            style="
+                padding:10px 15px;
+                margin-bottom:20px;
+                border:none;
+                border-radius:6px;
+                background:#333;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            "
+        >
+            ← Back
+        </button>
+
+        <h1 style="text-align:center;">
+            Medallion Summary
+        </h1>
+    `;
+
+    Object.keys(advisorsByTeam).forEach(function(team) {
+
+        const teamClients =
+            clients.filter(function(item) {
+                return item.team === team;
+            });
+
+        if (teamClients.length === 0) {
+            return;
+        }
+
+        const teamAdvisors =
+            advisorsByTeam[team].filter(function(advisor) {
+
+                return teamClients.some(function(item) {
+                    return item.advisor === advisor;
+                });
+
+            });
+
+        if (teamAdvisors.length === 0) {
+            return;
+        }
+
+        html += `
+            <h2 style="
+                margin-top:25px;
+                border-bottom:2px solid #333;
+                padding-bottom:6px;
+            ">
+                ${team}
+            </h2>
+
+            <table style="
+                width:100%;
+                border-collapse:collapse;
+                margin-bottom:25px;
+                font-size:clamp(7px,1.5vw,14px);
+            ">
+                <thead>
+                    <tr>
+                        <th>Advisor</th>
+                        <th>Total Lives Submitted</th>
+                        <th>Total Lives Settled</th>
+                        <th>Settled AC</th>
+                        <th>NSC</th>
+                        <th>Medal Lvl</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+        `;
+
+        teamAdvisors.forEach(function(advisor) {
+
+            const advisorClients =
+                teamClients.filter(function(item) {
+                    return item.advisor === advisor;
+                });
+
+            const totalLivesSubmitted =
+                advisorClients.reduce(function(total, item) {
+                    return total + Number(item.lives || 1);
+                }, 0);
+
+            const settledClients =
+                advisorClients.filter(function(item) {
+                    return item.dateSettled &&
+                        item.dateSettled.trim() !== "";
+                });
+
+            const totalLivesSettled =
+                settledClients.reduce(function(total, item) {
+                    return total + Number(item.lives || 1);
+                }, 0);
+
+            let settledAC = 0;
+            let settledNSC = 0;
+
+            settledClients.forEach(function(item) {
+
+                const ac = getAC(item);
+                const nsc = getNSC(item);
+
+                if (ac !== null) {
+                    settledAC += ac;
+                }
+
+                if (nsc !== null) {
+                    settledNSC += nsc;
+                }
+
+            });
+
+            let medal = "";
+
+            if (settledAC >= 1000000) {
+                medal = "Platinum 3";
+            }
+            else if (settledAC >= 500000) {
+                medal = "Platinum 2";
+            }
+            else if (settledAC >= 300000) {
+                medal = "Platinum 1";
+            }
+            else if (settledAC >= 200000) {
+                medal = "Gold";
+            }
+            else if (settledAC >= 100000) {
+                medal = "Silver";
+            }
+            else if (settledAC >= 50000) {
+                medal = "Bronze";
+            }
+            else if (settledAC >= 30000) {
+                medal = "Brass";
+            }
+
+            html += `
+                <tr>
+
+                    <td>
+                        ${advisor}
+                    </td>
+
+                    <td style="text-align:center;">
+                        ${totalLivesSubmitted}
+                    </td>
+
+                    <td style="text-align:center;">
+                        ${totalLivesSettled}
+                    </td>
+
+                    <td style="text-align:right;">
+                        ${settledAC.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </td>
+
+                    <td style="text-align:right;">
+                        ${settledNSC.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </td>
+
+                    <td style="
+                        text-align:center;
+                        font-weight:bold;
+                    ">
+                        ${medal}
+                    </td>
+
+                </tr>
+            `;
+        });
+
+        html += `
+                </tbody>
+            </table>
+        `;
+    });
+
+    medallionView.innerHTML = html;
+}
+
+
+function closeMedallionSummary() {
+
+    document.getElementById("medallionView").style.display =
+        "none";
+
+    document.getElementById("teamResults").style.display =
         "block";
 }
 
