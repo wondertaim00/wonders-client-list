@@ -3867,6 +3867,11 @@ function showMedallionSummary() {
     teamResultView.style.display = "none";
     medallionView.style.display = "block";
 
+		let grandLivesSubmitted = 0;
+		let grandLivesSettled = 0;
+		let grandAC = 0;
+		let grandNSC = 0;
+
     let html = `
         <button
             onclick="closeMedallionSummary()"
@@ -3942,6 +3947,11 @@ function showMedallionSummary() {
                 <tbody>
         `;
 
+  				let teamLivesSubmitted = 0;
+				let teamLivesSettled = 0;
+				let teamAC = 0;
+				let teamNSC = 0;
+
         teamAdvisors.forEach(function(advisor) {
 
             const advisorClients =
@@ -3982,6 +3992,13 @@ function showMedallionSummary() {
                 }
 
             });
+
+					
+					teamLivesSubmitted += totalLivesSubmitted;
+					teamLivesSettled += totalLivesSettled;
+					teamAC += settledAC;
+					teamNSC += settledNSC;
+					
 
             let medal = "";
 
@@ -4045,13 +4062,119 @@ function showMedallionSummary() {
 
                 </tr>
             `;
-        });
+                });
+
+        grandLivesSubmitted += teamLivesSubmitted;
+        grandLivesSettled += teamLivesSettled;
+        grandAC += teamAC;
+        grandNSC += teamNSC;
 
         html += `
+                <tr style="font-weight:bold; background:#f0f0f0;">
+                    <td>Total</td>
+
+                    <td style="text-align:center;">
+                        ${teamLivesSubmitted}
+                    </td>
+
+                    <td style="text-align:center;">
+                        ${teamLivesSettled}
+                    </td>
+
+                    <td style="text-align:right;">
+                        ${teamAC.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </td>
+
+                    <td style="text-align:right;">
+                        ${teamNSC.toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })}
+                    </td>
+
+                    <td></td>
+                </tr>
+
                 </tbody>
             </table>
         `;
     });
+
+
+		let grandMedal = "";
+
+if (grandAC >= 1000000) {
+    grandMedal = "Platinum 3";
+}
+else if (grandAC >= 500000) {
+    grandMedal = "Platinum 2";
+}
+else if (grandAC >= 300000) {
+    grandMedal = "Platinum 1";
+}
+else if (grandAC >= 200000) {
+    grandMedal = "Gold";
+}
+else if (grandAC >= 100000) {
+    grandMedal = "Silver";
+}
+else if (grandAC >= 50000) {
+    grandMedal = "Bronze";
+}
+else if (grandAC >= 30000) {
+    grandMedal = "Brass";
+}
+
+html += `
+    <h2 style="
+        margin-top:35px;
+        border-bottom:3px solid #333;
+        padding-bottom:8px;
+    ">
+        Titanium Wonders Total
+    </h2>
+
+    <table style="
+        width:100%;
+        border-collapse:collapse;
+        font-size:clamp(7px,1.5vw,14px);
+    ">
+        <tbody>
+            <tr style="font-weight:bold; background:#f0f0f0;">
+                <td>Total</td>
+
+                <td style="text-align:center;">
+                    ${grandLivesSubmitted}
+                </td>
+
+                <td style="text-align:center;">
+                    ${grandLivesSettled}
+                </td>
+
+                <td style="text-align:right;">
+                    ${grandAC.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td style="text-align:right;">
+                    ${grandNSC.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}
+                </td>
+
+                <td style="text-align:center;">
+                    ${grandMedal}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+`;
 
     medallionView.innerHTML = html;
 }
