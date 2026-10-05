@@ -2438,24 +2438,14 @@ table.innerHTML = `
     padding:3px 6px;
     white-space:nowrap;
 ">
-    ${calculateAC(
-        item.product,
-        item.faceAmount,
-        item.age,
-        item.premium,
-        item.lives
-    ) !== null
-        ? calculateAC(
-            item.product,
-            item.faceAmount,
-            item.age,
-            item.premium,
-            item.lives
-          ).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-          })
-        : ""}
+    ${
+        getAC(item) !== null
+            ? getAC(item).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })
+            : ""
+    }
 </td>
 
 <td style="
@@ -2463,26 +2453,14 @@ table.innerHTML = `
     padding:3px 6px;
     white-space:nowrap;
 ">
-    ${calculateNSC(
-        item.product,
-        item.faceAmount,
-        item.age,
-        item.premium,
-        item.paymentMode,
-			item.lives
-    ) !== null
-        ? calculateNSC(
-            item.product,
-            item.faceAmount,
-            item.age,
-            item.premium,
-            item.paymentMode,
-				item.lives
-          ).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-          })
-        : ""}
+    ${
+        getNSC(item) !== null
+            ? getNSC(item).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })
+            : ""
+    }
 </td>
 					
 					<td>${item.dateSettled || ""}</td>
@@ -2632,7 +2610,6 @@ function getNSC(item) {
 
     return null;
 }
-
 
     /* =========================
        DELETE
@@ -2824,14 +2801,20 @@ function editClientInline(index) {
         <!-- DITO ANG AC EDIT -->
 
         <td>
-            <input
-                type="number"
-                step="0.01"
-                value="${item.acOverride ?? ""}"
-                placeholder="Auto"
-                id="editAC${index}"
-            >
-        </td>
+            
+
+				<input
+    			type="number"
+    			step="0.01"
+    			value="${calculateAC(
+        			item.product,
+        			item.faceAmount,
+        			item.age,
+        			item.premium,
+        			item.lives
+    			) ?? ""}"
+    				id="editAC${index}"
+				>
 
         <td>
             ${getNSC(item) !== null
@@ -3286,22 +3269,9 @@ function printResults() {
 
 				const lives = Number(item.lives || 1);
 
-const ac = calculateAC(
-    item.product,
-    item.faceAmount,
-    item.age,
-    item.premium,
-    lives
-);
+const ac = getAC(item);
 
-const nsc = calculateNSC(
-    item.product,
-    item.faceAmount,
-    item.age,
-    item.premium,
-    item.paymentMode,
-    lives
-);
+const nsc = getNSC(item);
 
 if (ac !== null) {
     totalAC += ac;
@@ -3382,27 +3352,15 @@ if (nsc !== null) {
 			</td>
 
 			<!-- AC -->
-<td style="
-    border:1px solid #ccc;
-    padding:3px;
-    word-break:break-all;
-">
-    ${calculateAC(
-        item.product,
-        item.faceAmount,
-        item.age,
-        item.premium
-    ) !== null
-        ? calculateAC(
-            item.product,
-            item.faceAmount,
-            item.age,
-            item.premium
-          ).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-          })
-        : ""}
+<td>
+    ${
+        getAC(item) !== null
+            ? getAC(item).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              })
+            : ""
+    }
 </td>
 
 <!-- NSC -->
@@ -3411,24 +3369,12 @@ if (nsc !== null) {
     padding:3px;
     word-break:break-all;
 ">
-    ${calculateNSC(
-        item.product,
-        item.faceAmount,
-        item.age,
-        item.premium,
-        item.paymentMode
-    ) !== null
-        ? calculateNSC(
-            item.product,
-            item.faceAmount,
-            item.age,
-            item.premium,
-            item.paymentMode
-          ).toLocaleString(undefined, {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2
-          })
-        : ""}
+    ${getNSC(item) !== null
+    ? getNSC(item).toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      })
+    : ""}
 </td>
 
         <td style="
